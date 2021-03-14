@@ -33,26 +33,27 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="142"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 </view>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="none" translatesAutoresizingMaskIntoConstraints="NO" id="OsI-1C-1Zu">
-                                                    <rect key="frame" x="20" y="41" width="60" height="60"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill.questionmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="OsI-1C-1Zu">
+                                                    <rect key="frame" x="20" y="41.5" width="60" height="58"/>
+                                                    <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="60" id="0ZN-Ju-edC"/>
                                                         <constraint firstAttribute="height" constant="60" id="QL3-Uv-1bh"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s40-AO-f5f">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s40-AO-f5f">
                                                     <rect key="frame" x="314.5" y="45" width="51.5" height="24"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CPA-nl-EEH">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CPA-nl-EEH">
                                                     <rect key="frame" x="88" y="45" width="51.5" height="24"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ke-Dw-Zag">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ke-Dw-Zag">
                                                     <rect key="frame" x="88" y="73" width="33" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="160" id="74k-u6-ZYy"/>
@@ -62,7 +63,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8qv-gY-Z44">
-                                                    <rect key="frame" x="330.5" y="72.5" width="35.5" height="17"/>
+                                                    <rect key="frame" x="330.5" y="77" width="35.5" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -88,9 +89,9 @@
                                                 <constraint firstItem="s40-AO-f5f" firstAttribute="centerY" secondItem="CPA-nl-EEH" secondAttribute="centerY" id="GD7-vL-TXx"/>
                                                 <constraint firstItem="OsI-1C-1Zu" firstAttribute="leading" secondItem="gqJ-dJ-JGV" secondAttribute="leadingMargin" id="Hhi-S2-dMo"/>
                                                 <constraint firstAttribute="trailing" secondItem="LPR-sB-dgE" secondAttribute="trailing" id="Hxa-SQ-hrc"/>
+                                                <constraint firstItem="8qv-gY-Z44" firstAttribute="top" secondItem="s40-AO-f5f" secondAttribute="bottom" constant="8" id="KCf-LA-ZEW"/>
                                                 <constraint firstItem="CPA-nl-EEH" firstAttribute="leading" secondItem="OsI-1C-1Zu" secondAttribute="trailing" constant="8" id="LtL-XD-3Mi"/>
                                                 <constraint firstItem="OsI-1C-1Zu" firstAttribute="centerY" secondItem="gqJ-dJ-JGV" secondAttribute="centerY" id="c7Z-zL-HVe"/>
-                                                <constraint firstItem="8qv-gY-Z44" firstAttribute="centerY" secondItem="2ke-Dw-Zag" secondAttribute="centerY" id="eij-ll-JMB"/>
                                                 <constraint firstItem="LPR-sB-dgE" firstAttribute="top" secondItem="gqJ-dJ-JGV" secondAttribute="top" id="gr2-wc-te1"/>
                                                 <constraint firstItem="LPR-sB-dgE" firstAttribute="leading" secondItem="gqJ-dJ-JGV" secondAttribute="leading" id="jUe-j9-RQ5"/>
                                                 <constraint firstAttribute="bottom" secondItem="LPR-sB-dgE" secondAttribute="bottom" id="mvQ-Dm-T3b"/>
@@ -380,10 +381,11 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7iz-A6-DD8"/>
+        <segue reference="5Ga-Us-gb5"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="none" width="800" height="533"/>
+        <image name="none" width="270" height="270"/>
+        <image name="person.fill.questionmark" catalog="system" width="128" height="104"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -14,8 +14,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet var searchBar: UISearchBar!
     
     var stonks = [Stock]()
-    var stonksFiltered = [Stock]() /* массив фильтрованных поисковой строкой акций*/
+    var stonksFiltered = [Stock]() /* массив фильтрованных поисковой строкой акций */
     var searchActive = false // флаг для searchBar
+    
+    let APIKEY = "TNrz28kgIr62osfzv3h2VPuczfSHpIInoMpaD0i1tnp0YIZfmqc76Uc18XCF"
     
     var favouriteStocks = UserDefaults.standard.stringArray(forKey: "favourite") ?? [String]()
 
@@ -30,9 +32,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.dataSource = self
         // MARK:- Вызов метода загрузки акций в другой нити исполнения
         DispatchQueue.global(qos: .utility).async {
-           // self.loadTrandStocks(url: "https://mboum.com/api/v1/tr/trending?apikey=demo")
-            self.loadInfoAboutStock(ticker: "AAPL")
-            self.loadInfoAboutStock(ticker: "F")
+            self.loadTrandStocks(url: "https://mboum.com/api/v1/tr/trending?apikey=\(self.APIKEY)")
+//            self.loadInfoAboutStock(ticker: "AAPL")
+//            self.loadInfoAboutStock(ticker: "F")
         }
     }
     
@@ -56,8 +58,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     // MARK: - нажатие на ячейку в tableView. Передаю в информацию о выбранной акции в DetailsViewController
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let stonk = Stock(symbol: stonks[indexPath.section].symbol, longName: stonks[indexPath.section].longName, bookValue: stonks[indexPath.section].bookValue, regularMarketChange: stonks[indexPath.section].regularMarketChange, regularMarketChangePercent: stonks[indexPath.section].regularMarketChangePercent)
+        
+        let stonk = Stock(symbol: stonks[indexPath.section].symbol ?? "", longName: stonks[indexPath.section].longName ?? "", bookValue: stonks[indexPath.section].bookValue ?? 0, regularMarketChange: stonks[indexPath.section].regularMarketChange ?? 0, regularMarketChangePercent: stonks[indexPath.section].regularMarketChangePercent ?? 0)
         performSegue(withIdentifier: "fromMainSegue", sender: stonk)
+        
     }
     // MARK: - подготовка DetailsViewController в котором будет информация об акции
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -91,7 +95,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.roundView.layer.cornerRadius = 20
             cell.favButton.addTarget(self, action: #selector(addToFavourite(sender:)), for: .touchUpInside) // добавляем таргет для добавления в избранные
             cell.favButton.tag = indexPath.section
-            cell.stockImage.image = UIImage(named: stonks[indexPath.section].symbol ?? "none")
+            if (UIImage(named: stonks[indexPath.section].symbol ?? "") != nil) {
+                cell.stockImage.image = UIImage(named: stonks[indexPath.section].symbol ?? "none")
+            } else {
+                cell.stockImage.image = UIImage(named: "none")
+            }
             cell.stockImage.layer.cornerRadius = 15
             cell.stockImage.clipsToBounds = true
             cell.symbol.text = stonks[indexPath.section].symbol
@@ -106,7 +114,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 cell.roundView.backgroundColor = UIColor(red: 240/255, green: 244/255, blue: 247/255, alpha: 1)
             }
             cell.fullName.text = stonks[indexPath.section].longName
-            let bookValue = stonks[indexPath.section].bookValue ?? 9
+            let bookValue = stonks[indexPath.section].bookValue ?? 0
             let regularChange = round((stonks[indexPath.section].regularMarketChange ?? 0)*100)/100
             let changePercent = round((stonks[indexPath.section].regularMarketChangePercent ?? 0)*100 )/100
             cell.price.text = "$" + String(bookValue)
@@ -121,7 +129,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.roundView.layer.cornerRadius = 20
             cell.favButton.addTarget(self, action: #selector(addToFavourite(sender:)), for: .touchUpInside) // добавляем таргет для добавления в избранные
             cell.favButton.tag = indexPath.section
-            cell.stockImage.image = UIImage(named: stonksFiltered[indexPath.section].symbol ?? "none")
+            if (UIImage(named: stonks[indexPath.section].symbol ?? "") != nil) {
+                cell.stockImage.image = UIImage(named: stonks[indexPath.section].symbol ?? "none")
+            } else {
+                cell.stockImage.image = UIImage(named: "none")
+            }
             cell.stockImage.layer.cornerRadius = 15
             cell.stockImage.clipsToBounds = true
             cell.symbol.text = stonksFiltered[indexPath.section].symbol
@@ -203,10 +215,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
               
                       if let dict = json as? [[String: Any]] {
                           if let tickers = dict[0]["quotes"] as? [String] {
-                              var count = 0
+                              var count = 0 // переменная, чтобы ограничить количество вызово функции loadInfoAbputStock
                               for ticker in tickers {
                                 // MARK: - еще один запрос на закгрузку информации о стоимости акции
+                                if count != 3 {
                                     self.loadInfoAboutStock(ticker: ticker)
+                                    count += 1
+                                } else {
+                                    break
+                                }
                               }
                           }
                       }
@@ -219,10 +236,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
       
       // MARK: - метод, грузящий информацию об акции тикер которой передается в качестве параметра функции
       func loadInfoAboutStock(ticker: String) {
-        guard NSURL(string: "https://mboum.com/api/v1/qu/quote/?symbol=\(ticker)&apikey=demo") != nil else {
+        guard NSURL(string: "https://mboum.com/api/v1/qu/quote/?symbol=\(ticker)&apikey=\(self.APIKEY)") != nil else {
             return
         }
-          URLSession.shared.dataTask(with: NSURL(string: "https://mboum.com/api/v1/qu/quote/?symbol=\(ticker)&apikey=demo") as! URL) {
+          URLSession.shared.dataTask(with: NSURL(string: "https://mboum.com/api/v1/qu/quote/?symbol=\(ticker)&apikey=\(self.APIKEY)") as! URL) {
                   (data, response, error) in
           
               if error == nil && data != nil {
@@ -234,11 +251,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                           for i in dict {
                               if let stockDict = i as? [String: Any] {
                                   var stock = Stock()
-                                  stock.symbol = stockDict["symbol"] as? String
-                                  stock.longName = stockDict["longName"] as? String
-                                  stock.bookValue = stockDict["ask"] as? Double
-                                  stock.regularMarketChange = stockDict["regularMarketChange"] as? Double
-                                  stock.regularMarketChangePercent = stockDict["regularMarketChangePercent"] as? Double
+                                  stock.symbol = stockDict["symbol"] as? String ?? ""
+                                  stock.longName = stockDict["longName"] as? String ?? ""
+                                  stock.bookValue = stockDict["ask"] as? Double ?? 0
+                                  stock.regularMarketChange = stockDict["regularMarketChange"] as? Double ?? 0
+                                  stock.regularMarketChangePercent = stockDict["regularMarketChangePercent"] as? Double ?? 0
                                   self.stonks.append(stock)
                                   DispatchQueue.main.async {
                                       self.tableView.reloadData()
@@ -248,7 +265,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                       }
           
                   } catch {
-                      print("fuck")
+                     
                   }
           
               } else {
