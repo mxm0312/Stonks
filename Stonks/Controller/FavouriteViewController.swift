@@ -55,7 +55,7 @@ class FavouriteViewController: UIViewController, UITextFieldDelegate, UITableVie
     
     // MARK: - нажатие на ячейку в tableView. Передаю в информацию о выбранной акции в DetailsViewController
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let stonk = Stock(symbol: stonks[indexPath.section].symbol, longName: stonks[indexPath.section].longName, bookValue: stonks[indexPath.section].bookValue, regularMarketChange: stonks[indexPath.section].regularMarketChange, regularMarketChangePercent: stonks[indexPath.section].regularMarketChangePercent)
+        let stonk = Stock(symbol: stonks[indexPath.section].symbol, longName: stonks[indexPath.section].longName, price: stonks[indexPath.section].price, regularMarketChange: stonks[indexPath.section].regularMarketChange, regularMarketChangePercent: stonks[indexPath.section].regularMarketChangePercent)
         performSegue(withIdentifier: "fromFavSegue", sender: stonk)
     }
     
@@ -66,7 +66,7 @@ class FavouriteViewController: UIViewController, UITextFieldDelegate, UITableVie
                     // передаю данные о выбранной акции в переменную stock в DetailsVC
                     vc.stock.symbol = stonk.symbol
                     vc.stock.longName = stonk.longName
-                    vc.stock.bookValue = stonk.bookValue
+                    vc.stock.bookValue = stonk.price
                     vc.stock.regularMarketChange = stonk.regularMarketChange
                     vc.stock.regularMarketChangePercent = stonk.regularMarketChangePercent
                 }
@@ -102,7 +102,7 @@ class FavouriteViewController: UIViewController, UITextFieldDelegate, UITableVie
                 cell.roundView.backgroundColor = UIColor(red: 240/255, green: 244/255, blue: 247/255, alpha: 1)
             }
             cell.fullName.text = stonks[indexPath.section].longName
-            let bookValue = stonks[indexPath.section].bookValue ?? 9
+            let bookValue = stonks[indexPath.section].price ?? 9
             let regularChange = round((stonks[indexPath.section].regularMarketChange ?? 0)*100)/100
             let changePercent = round((stonks[indexPath.section].regularMarketChangePercent ?? 0)*100 )/100
             cell.price.text = "$" + String(bookValue)
@@ -136,7 +136,7 @@ class FavouriteViewController: UIViewController, UITextFieldDelegate, UITableVie
                 cell.roundView.backgroundColor = UIColor(red: 240/255, green: 244/255, blue: 247/255, alpha: 1)
             }
             cell.fullName.text = stonksFiltered[indexPath.section].longName
-            let bookValue = stonksFiltered[indexPath.section].bookValue ?? 9
+            let bookValue = stonksFiltered[indexPath.section].price ?? 9
             let regularChange = round((stonksFiltered[indexPath.section].regularMarketChange ?? 0)*100)/100
             let changePercent = round((stonksFiltered[indexPath.section].regularMarketChangePercent ?? 0)*100 )/100
             cell.price.text = "$" + String(bookValue)
@@ -208,7 +208,7 @@ class FavouriteViewController: UIViewController, UITextFieldDelegate, UITableVie
                                 var stock = Stock()
                                 stock.symbol = stockDict["symbol"] as? String ?? ""
                                 stock.longName = stockDict["longName"] as? String ?? ""
-                                stock.bookValue = stockDict["ask"] as? Double ?? 0
+                                stock.price = stockDict["ask"] as? Double ?? 0
                                 stock.regularMarketChange = stockDict["regularMarketChange"] as? Double ?? 0
                                 stock.regularMarketChangePercent = stockDict["regularMarketChangePercent"] as? Double ?? 0
                                 self.stonks.append(stock)

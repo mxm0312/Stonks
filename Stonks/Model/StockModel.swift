@@ -11,7 +11,7 @@ import Foundation
 struct Stock {
     var symbol: String?
     var longName: String?
-    var bookValue: Double?
+    var price: Double?
     var regularMarketChange: Double?
     var regularMarketChangePercent: Double?
 }

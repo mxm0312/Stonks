@@ -9,7 +9,7 @@ import UIKit
 
 class DetailsViewController: UIViewController {
     
-    var stock = Stock(symbol: "", longName: "", bookValue: 0, regularMarketChange: 0, regularMarketChangePercent: 0)
+    var stock = Stock(symbol: "", longName: "", price: 0, regularMarketChange: 0, regularMarketChangePercent: 0)
     
     @IBOutlet var tickerLabel: UILabel!
     @IBOutlet var fullNameLabel: UILabel!
@@ -24,7 +24,7 @@ class DetailsViewController: UIViewController {
         let regularChange = round((stock.regularMarketChange!)*100)/100
         let changePercent = round((stock.regularMarketChangePercent!)*100 )/100
         
-        priceLabel.text = "$"+String(stock.bookValue!)
+        priceLabel.text = "$"+String(stock.price!)
         if stock.regularMarketChange! < 0 {
             changeLabel.text = "-$" + String((-1)*regularChange) + " (\((-1)*changePercent)%)"
             changeLabel.textColor = UIColor.systemRed
@@ -35,7 +35,7 @@ class DetailsViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        NSLayoutConstraint(item: tickerLabel, attribute: .bottomMargin, relatedBy: .equal, toItem: fullNameLabel, attribute: .bottomMargin, multiplier: 1, constant: 1000)
+        
     }
     
     
