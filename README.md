@@ -4,7 +4,7 @@
 
 ВАЖНО!
 
-В mboum у меня BASIC план и он разрешает только 100 запросов. Если во время тестирования приложения вы привысили это число запросов, то можно в ViewController.swift заменить значение переменной MYAPIKEY на "demo" и во ViewDidLoad() вызывать вместо одной функции loadTrandStocks вызвать две функции loadInfoAboutStock(ticker: "AAPL") и loadInfoAboutStock(ticker: "F"). 
+В mboum у меня BASIC план и он разрешает только 100 запросов. Если во время тестирования приложения вы привысили это число запросов, то можно в ViewController.swift заменить значение переменной APIKEY на "demo" и во ViewDidLoad() вызывать вместо одной функции loadTrandStocks вызвать две функции loadInfoAboutStock(ticker: "AAPL") и loadInfoAboutStock(ticker: "F"). 
 
 <img width="563" alt="screen1" src="https://user-images.githubusercontent.com/21274627/110124906-bef17a00-7dd3-11eb-919b-bc1c3bb2b88c.png">
 <img width="563" alt="screen2" src="https://user-images.githubusercontent.com/21274627/110124908-bf8a1080-7dd3-11eb-9341-c129c299b968.png">
