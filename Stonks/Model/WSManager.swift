@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - недоделланый класс вебсокета
 class WSManager {
     public static let shared = WSManager() // singletone 
     private init(){}

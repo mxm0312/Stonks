@@ -25,14 +25,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(favouriteStocks)
         overrideUserInterfaceStyle = .light
         searchBar.delegate = self
         tableView.rowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
-        // MARK:- Вызов метода загрузки акций в другой нити исполнения
-        loader.loadTrandStocks(url: "https://mboum.com/api/v1/tr/trending?apikey=\(loader.APIKEY)", tableView: tableView, amount: 3)
+        // MARK:- грузим акции
+        loader.loadTrandStocks(url: "https://mboum.com/api/v1/tr/trending?apikey=\(loader.APIKEY)", tableView: tableView, amount: 5)
         
     }
     

@@ -29,10 +29,11 @@ class FavouriteViewController: UIViewController, UITextFieldDelegate, UITableVie
         searchBar.delegate = self
         tableView.rowHeight = 100
         
-        
+       // грузим любимые акции
        for ticker in myFavouriteStocks {
             loader.loadInfoAboutStock(ticker: ticker, tableView: tableView)
         }
+        
         tableView.rowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
