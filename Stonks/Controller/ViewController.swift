@@ -7,17 +7,18 @@
 
 import UIKit
 
+var stonks = [Stock]()
+
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UISearchBarDelegate {
     
-
+    
     @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!
     
-    var stonks = [Stock]()
+    
     var stonksFiltered = [Stock]() /* массив фильтрованных поисковой строкой акций */
     var searchActive = false // флаг для searchBar
-    
-    let APIKEY = "TNrz28kgIr62osfzv3h2VPuczfSHpIInoMpaD0i1tnp0YIZfmqc76Uc18XCF"
+    var loader = Loader(APIKEY: "TNrz28kgIr62osfzv3h2VPuczfSHpIInoMpaD0i1tnp0YIZfmqc76Uc18XCF")
     
     var favouriteStocks = UserDefaults.standard.stringArray(forKey: "favourite") ?? [String]()
 
@@ -31,11 +32,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         // MARK:- Вызов метода загрузки акций в другой нити исполнения
-        DispatchQueue.global(qos: .utility).async {
-            self.loadTrandStocks(url: "https://mboum.com/api/v1/tr/trending?apikey=\(self.APIKEY)")
-            self.loadInfoAboutStock(ticker: "AAPL")
-            self.loadInfoAboutStock(ticker: "F")
-        }
+        loader.loadTrandStocks(url: "https://mboum.com/api/v1/tr/trending?apikey=\(loader.APIKEY)", tableView: tableView, amount: 3)
+        
     }
     
     // MARK: - tableView stuff
@@ -71,7 +69,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     // передаю данные о выбранной акции в переменную stock в DetailsVC
                     vc.stock.symbol = stonk.symbol
                     vc.stock.longName = stonk.longName
-                    vc.stock.bookValue = stonk.price
+                    vc.stock.price = stonk.price
                     vc.stock.regularMarketChange = stonk.regularMarketChange
                     vc.stock.regularMarketChangePercent = stonk.regularMarketChangePercent
                 }
@@ -85,6 +83,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
+    // MARK: - отоброжение ячейки с акцией
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell") as! TableViewCell
@@ -129,8 +128,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.roundView.layer.cornerRadius = 20
             cell.favButton.addTarget(self, action: #selector(addToFavourite(sender:)), for: .touchUpInside) // добавляем таргет для добавления в избранные
             cell.favButton.tag = indexPath.section
-            if (UIImage(named: stonks[indexPath.section].symbol ?? "") != nil) {
-                cell.stockImage.image = UIImage(named: stonks[indexPath.section].symbol ?? "none")
+            if (UIImage(named: stonksFiltered[indexPath.section].symbol ?? "") != nil) {
+                cell.stockImage.image = UIImage(named: stonksFiltered[indexPath.section].symbol ?? "none")
             } else {
                 cell.stockImage.image = UIImage(named: "none")
             }
@@ -204,77 +203,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
-    // MARK: - метод, получающий трендовые тикеры и потом для каждого полученного трендового тикера вызывает метод loadInfoAboutStock
-      func loadTrandStocks(url: String) {
-          // MARK: - запрос на загрузку трендовых акций
-          URLSession.shared.dataTask(with: NSURL(string: url) as! URL) {
-              data, response, error in
-              if error == nil && data != nil {
-                  do {
-                      let json = try JSONSerialization.jsonObject(with: data!, options: [])
-              
-                      if let dict = json as? [[String: Any]] {
-                          if let tickers = dict[0]["quotes"] as? [String] {
-                              var count = 0 // переменная, чтобы ограничить количество вызово функции loadInfoAbputStock
-                              for ticker in tickers {
-                                // MARK: - еще один запрос на закгрузку информации о стоимости акции
-                                if count != 3 {
-                                    self.loadInfoAboutStock(ticker: ticker)
-                                    count += 1
-                                } else {
-                                    break
-                                }
-                              }
-                          }
-                      }
-                  } catch  {
-                      print("балин")
-                  }
-              }
-          }.resume()
-      }
-      
-      // MARK: - метод, грузящий информацию об акции тикер которой передается в качестве параметра функции
-      func loadInfoAboutStock(ticker: String) {
-        guard NSURL(string: "https://mboum.com/api/v1/qu/quote/?symbol=\(ticker)&apikey=\(self.APIKEY)") != nil else {
-            return
-        }
-          URLSession.shared.dataTask(with: NSURL(string: "https://mboum.com/api/v1/qu/quote/?symbol=\(ticker)&apikey=\(self.APIKEY)") as! URL) {
-                  (data, response, error) in
-          
-              if error == nil && data != nil {
-          
-                  do {
-                      let json = try JSONSerialization.jsonObject(with: data!, options: [])
-                      if let dict = json as? [[String: Any]] {
-                          // MARK: - Загрузка каждой отдельной i акции в массив акций в виде структуры Stock
-                          for i in dict {
-                              if let stockDict = i as? [String: Any] {
-                                  var stock = Stock()
-                                  stock.symbol = stockDict["symbol"] as? String ?? ""
-                                  stock.longName = stockDict["longName"] as? String ?? ""
-                                  stock.price = stockDict["ask"] as? Double ?? 0
-                                  stock.regularMarketChange = stockDict["regularMarketChange"] as? Double ?? 0
-                                  stock.regularMarketChangePercent = stockDict["regularMarketChangePercent"] as? Double ?? 0
-                                  self.stonks.append(stock)
-                                  DispatchQueue.main.async {
-                                      self.tableView.reloadData()
-                                  }
-                              }
-                          }
-                      }
-          
-                  } catch {
-                     
-                  }
-          
-              } else {
-                  print(error)
-                  print(data)
-              }
-          }.resume()
-      }
-    
     // MARK: - Поиск по тикеру или названию
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
@@ -305,6 +233,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // убрать клавиатуру по нажатию на Searck на клавиатуре
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        stonks.removeAll()
     }
     
 }
