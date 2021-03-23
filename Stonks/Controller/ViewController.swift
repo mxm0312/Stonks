@@ -30,7 +30,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.rowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
-        // MARK:- грузим акции
+        // MARK:- грузим акции (в параметре amount указываю сколько акций загрузить)
         loader.loadTrandStocks(url: "https://mboum.com/api/v1/tr/trending?apikey=\(loader.APIKEY)", tableView: tableView, amount: 5)
         
     }

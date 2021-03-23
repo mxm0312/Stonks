@@ -23,6 +23,7 @@ class Loader {
           URLSession.shared.dataTask(with: NSURL(string: url) as! URL) {
               data, response, error in
               if error == nil && data != nil {
+                
                   do {
                       let json = try JSONSerialization.jsonObject(with: data!, options: [])
               
@@ -39,10 +40,26 @@ class Loader {
                                 }
                               }
                           }
+                      } else {
+                        // если что-то идет не так просто гружу акции по демо ключу
+                        print("ошибочка")
+                        self.APIKEY = "demo"
+                        self.loadInfoAboutStock(ticker: "AAPL", tableView: tableView)
+                        self.loadInfoAboutStock(ticker: "F", tableView: tableView)
                       }
                   } catch  {
-                      print("балин")
+                    // если что-то идет не так просто гружу акции по демо ключу
+                    print("ошибочка")
+                    self.APIKEY = "demo"
+                    self.loadInfoAboutStock(ticker: "AAPL", tableView: tableView)
+                    self.loadInfoAboutStock(ticker: "F", tableView: tableView)
                   }
+              } else {
+                // если что-то идет не так просто гружу акции по демо ключу
+                print("ошибочка")
+                self.APIKEY = "demo"
+                self.loadInfoAboutStock(ticker: "AAPL", tableView: tableView)
+                self.loadInfoAboutStock(ticker: "F", tableView: tableView)
               }
           }.resume()
       }
@@ -75,17 +92,22 @@ class Loader {
                                   }
                               }
                           }
+                      } else {
+                        // если что-то идет не так грузим акции по демо ключу
+                        self.APIKEY = "demo"
+                        self.loadInfoAboutStock(ticker: ticker, tableView: tableView)
                       }
           
                   } catch {
                     print("ОШИБКА")
+                    self.APIKEY = "demo"
+                    self.loadInfoAboutStock(ticker: ticker, tableView: tableView)
                   }
           
               } else {
                 
                 self.APIKEY = "demo"
-                self.loadInfoAboutStock(ticker: "AAPL", tableView: tableView)
-                self.loadInfoAboutStock(ticker: "F", tableView: tableView)
+                self.loadInfoAboutStock(ticker: ticker, tableView: tableView)
                 
               }
           }.resume()
