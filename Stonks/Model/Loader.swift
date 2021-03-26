@@ -42,21 +42,21 @@ class Loader {
                           }
                       } else {
                         // если что-то идет не так просто гружу акции по демо ключу
-                        print("ошибочка")
+                        
                         self.APIKEY = "demo"
                         self.loadInfoAboutStock(ticker: "AAPL", tableView: tableView)
                         self.loadInfoAboutStock(ticker: "F", tableView: tableView)
                       }
                   } catch  {
                     // если что-то идет не так просто гружу акции по демо ключу
-                    print("ошибочка")
+                    
                     self.APIKEY = "demo"
                     self.loadInfoAboutStock(ticker: "AAPL", tableView: tableView)
                     self.loadInfoAboutStock(ticker: "F", tableView: tableView)
                   }
               } else {
                 // если что-то идет не так просто гружу акции по демо ключу
-                print("ошибочка")
+               
                 self.APIKEY = "demo"
                 self.loadInfoAboutStock(ticker: "AAPL", tableView: tableView)
                 self.loadInfoAboutStock(ticker: "F", tableView: tableView)
@@ -99,7 +99,6 @@ class Loader {
                       }
           
                   } catch {
-                    print("ОШИБКА")
                     self.APIKEY = "demo"
                     self.loadInfoAboutStock(ticker: ticker, tableView: tableView)
                   }
